@@ -1,0 +1,140 @@
+# =============================================
+# SALES AUTOMATION MCP - .gitignore
+# =============================================
+
+# =============================================
+# VARIABLES DE ENTORNO Y CREDENCIALES
+# =============================================
+.env
+.env.local
+.env.production
+*.key
+*.pem
+secrets/
+credentials/
+
+# =============================================
+# NODE.JS
+# =============================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+.pnpm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# =============================================
+# LOGS Y DATOS
+# =============================================
+logs/
+*.log
+log/
+
+# Datos temporales
+tmp/
+temp/
+cache/
+downloads/
+
+# =============================================
+# DATABASE
+# =============================================
+# Dumps de base de datos
+*.sql.backup
+*.dump
+*.db
+*.sqlite
+*.sqlite3
+
+# PostgreSQL
+postgres_data/
+pgdata/
+
+# =============================================
+# DOCKER
+# =============================================
+# No ignorar docker-compose.yml pero sí archivos temporales
+.docker/
+docker-compose.override.yml
+
+# =============================================
+# IDEs Y EDITORES
+# =============================================
+# Visual Studio Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# =============================================
+# SISTEMA OPERATIVO
+# =============================================
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.stackdump
+[Dd]esktop.ini
+
+# Linux
+*~
+
+# =============================================
+# TESTING
+# =============================================
+test-results/
+playwright-report/
+test-output/
+
+# =============================================
+# BUILDS Y DISTRIBUCIÓN
+# =============================================
+dist/
+build/
+out/
+
+# =============================================
+# ESPECÍFICO DEL PROYECTO
+# =============================================
+# Archivos de prueba con datos reales
+test-data/
+sample-data/
+backup-*.json
+
+# Certificados SSL locales
+ssl/
+certs/
+
+# Documentación generada
+docs/generated/
