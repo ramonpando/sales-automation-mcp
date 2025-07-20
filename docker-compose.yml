@@ -4,6 +4,7 @@ services:
   # PostgreSQL Database
   postgres:
     image: postgres:15-alpine
+    container_name: postgres_db
     environment:
       POSTGRES_DB: sales_automation
       POSTGRES_USER: sales_user
@@ -18,11 +19,14 @@ services:
       test: ["CMD-SHELL", "pg_isready -U sales_user -d sales_automation"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5 # Aumentado a 5 reintentos para dar más tiempo al inicio
+    networks:
+      - app-network # Asignado a la red común
 
   # Redis Cache
   redis:
     image: redis:7-alpine
+    container_name: redis_cache
     ports:
       - "6379:6379"
     restart: unless-stopped
@@ -33,13 +37,16 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
       timeout: 5s
-      retries: 3
+      retries: 5 # Aumentado a 5 reintentos
+    networks:
+      - app-network # Asignado a la red común
 
   # MCP Enrichment Service
   mcp-enrichment:
     build:
       context: ./mcp-enrichment
       dockerfile: Dockerfile
+    container_name: mcp_app
     ports:
       - "3001:3001"
     environment:
@@ -60,7 +67,16 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+      start_period: 20s # Añadido: da tiempo a la app para iniciarse antes de empezar los healthchecks
+    networks:
+      - app-network # Asignado a la red común
+
+# Definición de la red personalizada
+networks:
+  app-network:
+    driver: bridge
 
 volumes:
   postgres_data:
   redis_data:
+
