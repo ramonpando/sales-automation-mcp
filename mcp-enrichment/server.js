@@ -35,13 +35,18 @@ const pool = new Pool({
 });
 
 // Test database connection
-pool.query('SELECT NOW()', (err, res) => {
-  if (err) {
-    logger.error('❌ Database connection failed:', err.message);
-  } else {
-    logger.info('✅ Database connected successfully');
-  }
-});
+// Test database connection only if enabled
+if (process.env.ENABLE_DATABASE_SAVE === 'true') {
+  pool.query('SELECT NOW()', (err, res) => {
+    if (err) {
+      logger.error('❌ Database connection failed:', err.message);
+    } else {
+      logger.info('✅ Database connected successfully');
+    }
+  });
+} else {
+  logger.info('📝 Database disabled - running in memory mode');
+}
 
 // =============================================
 // CONFIGURACIÓN DE REDIS
@@ -49,16 +54,21 @@ pool.query('SELECT NOW()', (err, res) => {
 let redisClient = null;
 
 async function connectRedis() {
-  try {
-    redisClient = createClient({
-      url: process.env.REDIS_URL || 'redis://redis:6379'
-    });
-    
-    redisClient.on('error', (err) => logger.warn('Redis warning:', err.message));
-    await redisClient.connect();
-    logger.info('✅ Redis connected successfully');
-  } catch (error) {
-    logger.warn('⚠️ Redis connection failed, continuing without cache:', error.message);
+  if (process.env.ENABLE_DATABASE_SAVE === 'true') {
+    try {
+      redisClient = createClient({
+        url: process.env.REDIS_URL || 'redis://redis:6379'
+      });
+      
+      redisClient.on('error', (err) => logger.warn('Redis warning:', err.message));
+      await redisClient.connect();
+      logger.info('✅ Redis connected successfully');
+    } catch (error) {
+      logger.warn('⚠️ Redis connection failed, continuing without cache:', error.message);
+      redisClient = null;
+    }
+  } else {
+    logger.info('📝 Redis disabled - running in memory mode');
     redisClient = null;
   }
 }
